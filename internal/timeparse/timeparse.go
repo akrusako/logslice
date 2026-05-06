@@ -51,3 +51,16 @@ func (p *Parser) Parse(raw string) (time.Time, error) {
 func ParseAny(raw string) (time.Time, error) {
 	return NewParser().Parse(raw)
 }
+
+// Reset clears the cached format, forcing the next Parse call to try all known
+// formats. This is useful when log lines from a different source with a
+// different timestamp format are about to be parsed.
+func (p *Parser) Reset() {
+	p.cachedFormat = ""
+}
+
+// CachedFormat returns the format string that was last successfully used by
+// Parse, or an empty string if no format has been cached yet.
+func (p *Parser) CachedFormat() string {
+	return p.cachedFormat
+}
