@@ -32,7 +32,7 @@ func TestTailLessThanTotal(t *testing.T) {
 		t.Fatalf("Lines: %v", err)
 	}
 	if len(lines) != 3 {
-		t.Fatalf("want 3 lines, got %d", len(lines))
+		t.Fatalf("want 3 lines, got %d", len(lines)))
 	}
 	if lines[0] != "line3" || lines[2] != "line5" {
 		t.Errorf("unexpected lines: %v", lines)
@@ -84,5 +84,22 @@ func TestTailContentIntegrity(t *testing.T) {
 		if !strings.Contains(l, "msg=hello") {
 			t.Errorf("unexpected line content: %q", l)
 		}
+	}
+}
+
+// TestTailEmptyFile verifies that tailing an empty file returns no lines
+// rather than an error, since an empty log file is a valid state.
+func TestTailEmptyFile(t *testing.T) {
+	path := writeTempLog(t, "")
+	r, err := tail.New(path)
+	if err != nil {
+		t.Fatalf("New: %v", err)
+	}
+	lines, err := r.Lines(10)
+	if err != nil {
+		t.Fatalf("Lines on empty file: %v", err)
+	}
+	if len(lines) != 0 {
+		t.Errorf("expected no lines for empty file, got %d: %v", len(lines), lines)
 	}
 }
