@@ -92,3 +92,26 @@ func TestCustomField(t *testing.T) {
 		t.Error("expected debug to be dropped with custom field name")
 	}
 }
+
+func TestCountersReset(t *testing.T) {
+	f := New(LevelWarn, "level")
+	f.Allow(`level=debug msg="a"`)
+	f.Allow(`level=warn msg="b"`)
+	f.Allow(`level=error msg="c"`)
+
+	if f.Dropped != 1 {
+		t.Fatalf("before reset: Dropped = %d, want 1", f.Dropped)
+	}
+	if f.Passed != 2 {
+		t.Fatalf("before reset: Passed = %d, want 2", f.Passed)
+	}
+
+	f.Reset()
+
+	if f.Dropped != 0 {
+		t.Errorf("after reset: Dropped = %d, want 0", f.Dropped)
+	}
+	if f.Passed != 0 {
+		t.Errorf("after reset: Passed = %d, want 0", f.Passed)
+	}
+}
