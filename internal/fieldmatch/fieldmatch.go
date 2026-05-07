@@ -65,3 +65,13 @@ func (m *Matcher) MatchedFields(line string) map[string]string {
 	}
 	return result
 }
+
+// Fields returns the list of field names that this Matcher has rules for.
+// The order of the returned slice is not guaranteed to be stable.
+func (m *Matcher) Fields() []string {
+	fields := make([]string, len(m.rules))
+	for i, r := range m.rules {
+		fields[i] = r.field
+	}
+	return fields
+}
