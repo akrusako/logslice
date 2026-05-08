@@ -64,6 +64,16 @@ func (t *Transformer) Apply(line string) string {
 	return line
 }
 
+// ApplyAll applies the transformer to each line in the provided slice and
+// returns a new slice containing the transformed lines.
+func (t *Transformer) ApplyAll(lines []string) []string {
+	out := make([]string, len(lines))
+	for i, line := range lines {
+		out[i] = t.Apply(line)
+	}
+	return out
+}
+
 func (t *Transformer) applyRename(line string) string {
 	// Try JSON first.
 	var obj map[string]interface{}
