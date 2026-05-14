@@ -87,3 +87,16 @@ func TestCustomPlaceholder(t *testing.T) {
 		t.Errorf("expected custom placeholder, got %q", out)
 	}
 }
+
+// TestMaskEmptyLine verifies that an empty input line is returned unchanged
+// and does not increment the masked count.
+func TestMaskEmptyLine(t *testing.T) {
+	m := New([]string{"password"}, "***")
+	out := m.Mask("")
+	if out != "" {
+		t.Errorf("expected empty string, got %q", out)
+	}
+	if m.MaskedCount() != 0 {
+		t.Errorf("expected 0 masked lines for empty input, got %d", m.MaskedCount())
+	}
+}
